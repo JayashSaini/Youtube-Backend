@@ -11,10 +11,7 @@ async function  connectDB(){
             throw error
         })
       
-        console.log("MONGODB IS CONNECTED")
-        app.listen(process.env.PORT,()=>{
-            console.log("App is Listen in : ",process.env.PORT)
-        })
+        console.log("MONGODB IS CONNECTED");
     } catch (error) {
         console.error("ERROR : ",error)
         process.exit(1);
