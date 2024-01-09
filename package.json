@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon -r  dotenv/config --experimental-json-modules src/index.js"
+    "dev": "npx nodemon -r  dotenv/config --experimental-json-modules src/index.js",
+    "format": "prettier --write \"src/**/*.js\""
   },
   "keywords": [
     "Chai",
