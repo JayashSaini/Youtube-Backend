@@ -118,16 +118,16 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(400, "User does not exits");
   }
-
+  console.log("Password is : ", password);
   const isPasswordvalid = await user.isPasswordCorrect(password);
-
+  console.log("is password valid : ", isPasswordvalid);
   if (!isPasswordvalid) {
     throw new ApiError(400, "Invalid user credentials!!!");
   }
 
-  const { refreshToken, accessToken } = generateAccessTokenAndRefreshToken(
-    user._id
-  );
+  const { accessToken, refreshToken } =
+    await generateAccessTokenAndRefreshToken(user._id);
+
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
@@ -138,7 +138,7 @@ const loginUser = asyncHandler(async (req, res) => {
   };
 
   return res
-    .send(200)
+    .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
     .json(
@@ -154,30 +154,29 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-const logoutUser = asyncHandler( async (req, res)=>{
-    await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        $unset : {
-          refreshToken : 1 // this removes the field from document
-        }
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1, // this removes the field from document
       },
-      {
-        new : true
-      }
-    )
-
-    const options = {
-      httpOnly : true,
-      secure : true
+    },
+    {
+      new: true,
     }
+  );
 
-    res.
-    status(200)
-    .clearCookie("accessToken",options)
-    .clearCookie("refreshToken",options)
-    .json(new ApiResponse(200,{},"User logged Out"));
-    
-})
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"));
+});
 
 export { registerUser, loginUser, logoutUser };
