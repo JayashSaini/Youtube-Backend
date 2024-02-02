@@ -39,21 +39,17 @@ router.route("/change-password").post(verifyJwt, changeCurrentPassword);
 router.route("/current-user").get(verifyJwt, getCurrentUser);
 router.route("/update-account").patch(verifyJwt, updateAccountDetails);
 
-router
-  .route("/update-avatar")
-  .patch(
-    verifyJwt,
-    upload.single("avatar"), // multer
-    updateUserAvatar
-  );
+router.route("/update-avatar").patch(
+  verifyJwt,
+  upload.single("avatar"), // multer
+  updateUserAvatar
+);
 
-router
-  .route("/update-coverImage")
-  .patch(
-    verifyJwt,
-    upload.single("coverImage"), // multer
-    updateUserCoverImage
-  );
+router.route("/update-coverImage").patch(
+  verifyJwt,
+  upload.single("coverImage"), // multer
+  updateUserCoverImage
+);
 
 router.route("/channel/:username").get(verifyJwt, getUserChannelProfile);
 router.route("/history").get(verifyJwt, getWatchHistory);
