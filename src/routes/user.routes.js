@@ -35,12 +35,12 @@ router.route("/login").post(loginUser);
 // secured routes
 router.route("/logout").post(verifyJwt, logoutUser);
 router.route("/refresh-token").post(refreshAcessToken);
-router.route("change-password").post(verifyJwt, changeCurrentPassword);
-router.route("current-user").get(verifyJwt, getCurrentUser);
-router.route("update-account").patch(verifyJwt, updateAccountDetails);
+router.route("/change-password").post(verifyJwt, changeCurrentPassword);
+router.route("/current-user").get(verifyJwt, getCurrentUser);
+router.route("/update-account").patch(verifyJwt, updateAccountDetails);
 
 router
-  .route("update-avatar")
+  .route("/update-avatar")
   .patch(
     verifyJwt,
     upload.single("avatar"), // multer
@@ -48,7 +48,7 @@ router
   );
 
 router
-  .route("update-coverImage")
+  .route("/update-coverImage")
   .patch(
     verifyJwt,
     upload.single("coverImage"), // multer
