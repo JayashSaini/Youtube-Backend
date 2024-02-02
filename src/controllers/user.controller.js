@@ -120,9 +120,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(400, "User does not exits");
   }
-  console.log("Password is : ", password);
   const isPasswordvalid = await user.isPasswordCorrect(password);
-  console.log("is password valid : ", isPasswordvalid);
   if (!isPasswordvalid) {
     throw new ApiError(400, "Invalid user credentials!!!");
   }
@@ -193,7 +191,6 @@ const refreshAcessToken = asyncHandler(async (req, res) => {
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
-    console.log("Decoded Token : ", decodedToken);
     const user = User.findById(decodedToken._id);
 
     if (!user) {
@@ -241,7 +238,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Invalid old Passowrd");
   }
 
-  user?.password = newPassword;
+  user.password = newPassword;
   await user.save({ validateBeforeSave: false });
 
   return res
@@ -262,7 +259,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required");
   }
 
-  const user = await user
+  const user = await User
     .findByIdAndUpdate(
       req.user?._id,
       {
@@ -294,7 +291,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findByIdAndUpdate(
-    user?._id,
+    req.user?._id,
     {
       $set: {
         avatar: avatar?.url,
@@ -322,7 +319,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findByIdAndUpdate(
-    user?._id,
+    req.user?._id,
     {
       $set: {
         coverImage: coverImage?.url,
@@ -367,13 +364,13 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     },
     {
       $addFields: {
-        $subscribersCount: {
+        subscribersCount: {
           $size: "$subscribers",
         },
-        $ChannelSubscribedCountTo: {
+        ChannelSubscribedCountTo: {
           $size: "$subscribedTo",
         },
-        $isSubscribed: {
+        isSubscribed: {
           $cond: {
             if: {
               $in: [req.user?._id, "$subscribers.subscriber"],
