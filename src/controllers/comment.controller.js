@@ -20,7 +20,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
 
     const comments = Comment
     .mongooseAggregatePaginate(commentAggregate,options)
-    .selector(
+    .find(
         {
             "video" : videoId
         }
