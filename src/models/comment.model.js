@@ -1,18 +1,18 @@
 import mongoose, { Schema } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const commentSchema = new Schema(
   {
     comment: {
       type: String,
-      required: ture,
+      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
     video: {
-      type:Schema.Types.ObjectId, 
+      type: Schema.Types.ObjectId,
       ref: "Video",
     },
   },
